@@ -29,21 +29,29 @@
 \begin{document}
 
 \maketitle
+
 \begin{multicols}{2}
+
     \section{Introducción}
 
-    \textbf{Git:} Software de control de versiones distribuido. \\ \newline Una vez instalado Git, en la términal se configura el nombre de usuario y el correo electrónico, considerando que existe la jerarquía: 
+    Primer cambio
+
+    \textbf{Git:} Software de control de versiones distribuido. \\ \newline 
+    Una vez instalado Git, en la términal se configura el nombre de usuario y el correo electrónico, considerando que existe la jerarquía: 
+    
     $$\begin{array}{ll}
         Sistema& (\textnormal{toda la computadora})  \\
         Global& (\textnormal{todos los repositorios de un usuario})   \\
         Local& (\textnormal{un repositorio})
     \end{array}$$
-    donde se da prioridad al espacio más pequeño (\textit{Local}). Las configuraciones en el espacio \textit{Global} se hacen con los siguientes comandos:
+    
+    donde se da prioridad al espacio más pequeño (\textit{Local}). Las configuraciones en el espacio \textit{Global} se hacen con los siguientes comandos: 
     
 \begin{verbatim}
     git config --global user.name "nombre_usuario"
     git config --global user.email "correo_usuario"
 \end{verbatim}
+
 Para ver las configuraciones globales se usa:
 \begin{verbatim}
     git config --global --list
