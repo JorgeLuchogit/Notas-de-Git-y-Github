@@ -1,0 +1,324 @@
+\documentclass[10pt,oneside]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{latexsym}
+\usepackage[spanish,es-nodecimaldot,es-noshorthands]{babel}
+\usepackage{amsfonts}
+\usepackage{multicol}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage[all]{xy}
+\usepackage{tikz}
+\usepackage[retainorgcmds]{IEEEtrantools}
+\usepackage{mathrsfs}
+\usepackage{ upgreek }
+\usepackage[pdftex]{hyperref}
+\addtolength{\hoffset}{-3.5cm}
+\addtolength{\textwidth}{7.2cm}
+\addtolength{\voffset}{-3cm}
+\addtolength{\textheight}{5cm}
+\pagestyle{empty}
+
+
+\title{\textbf{Notas de Git y GitHub}}
+
+\author{Lucho Cervantes Jorge Luis}
+
+
+\begin{document}
+
+\maketitle
+\begin{multicols}{2}
+    \section{Introducción}
+
+    \textbf{Git:} Software de control de versiones distribuido. \\ \newline Una vez instalado Git, en la términal se configura el nombre de usuario y el correo electrónico, considerando que existe la jerarquía: 
+    $$\begin{array}{ll}
+        Sistema& (\textnormal{toda la computadora})  \\
+        Global& (\textnormal{todos los repositorios de un usuario})   \\
+        Local& (\textnormal{un repositorio})
+    \end{array}$$
+    donde se da prioridad al espacio más pequeño (\textit{Local}). Las configuraciones en el espacio \textit{Global} se hacen con los siguientes comandos:
+    
+\begin{verbatim}
+    git config --global user.name "nombre_usuario"
+    git config --global user.email "correo_usuario"
+\end{verbatim}
+Para ver las configuraciones globales se usa:
+\begin{verbatim}
+    git config --global --list
+\end{verbatim}
+Y las configuraciones en general:
+\begin{verbatim}
+    git config --list
+\end{verbatim}
+\textbf{\textcolor{red}{Nota:}} \textcolor{blue}{La terminal se limpia con el comando:}
+\begin{verbatim}
+    clear
+\end{verbatim}
+Para configurar VS Code como editor de código:
+\begin{verbatim}
+    git config core.editor "code --wait"
+\end{verbatim}
+\textbf{\textcolor{red}{Nota:}} \textcolor{blue}{- -wait le indica a la computadora que no guarde los cambios hasta que se cierre el editor de código.}\\ \newline
+Para configurar el color de la interfaz:
+\begin{verbatim}
+    git config --global color.ui true
+\end{verbatim}
+El salto de línea en Windows (\textbackslash r \textbackslash n ) es distinto al de Linux, Mac y Unix (\textbackslash n). Esto puede generar conflictos al subir y descargar un archivo. Para evitar esto se usa:
+\begin{verbatim}
+    git config --global core.autocrlf true
+\end{verbatim}
+\textbf{\textcolor{red}{Nota:}} \textcolor{blue}{Si no se está en Windows se usa input en lugar de true. }
+\section{Repositorios}
+\textbf{Repositorio:} Espacio para guardar administrar y organizar archivos, imagenes, códigos, proyectos etc. Se separa en tres áreas:\\ \newline \textbf{Área de trabajo:} Donde se realiza la creación y modificaciones del proyecto.\\ \newline \textbf{Área de staging (de preparación):} Donde se almacenan todos los cambios. 
+\\ \newline \textbf{Área de commit:} Donde está todo el trabajo ya confirmado.\\ \newline 
+Para cambiar a un directorio (carpetas): \begin{verbatim}
+    cd nombre_directorio
+\end{verbatim}
+Para regresar un directorio en la ruta: 
+\begin{verbatim}
+    cd ../
+\end{verbatim}
+Para crear una nueva carpeta 
+\begin{verbatim}
+    mkdir nombre_carpeta
+\end{verbatim}
+Eliminar una carpeta 
+\begin{verbatim}
+    rmdir nombre_carpeta
+\end{verbatim}
+\textbf{Inicializar git:}
+\begin{verbatim}
+    git init
+\end{verbatim}
+Mostrar el contenido de la carpeta en la que se está trabajando
+\begin{verbatim}
+    ls
+\end{verbatim}
+Mostrar la ruta en la que se está trabajando
+\begin{verbatim}
+    pwd
+\end{verbatim}
+Mostrar archivos ocultos en la que se está trabajando
+\begin{verbatim}
+    ls -a
+\end{verbatim}
+\textbf{\textcolor{red}{Nota:}} \textcolor{blue}{el nombre de los archivos ocultos comienza con .}\\ \newline
+Subir un archivo del área de trabajo (El directorio donde se inicializó git y que contiene la carpeta oculta .git) al área de preparación (\textcolor{red}{Nota:}\textcolor{blue}{ El archivo aún no se sube al repositorio}):
+\begin{verbatim}
+    git add nombre_archivo
+\end{verbatim}
+\textbf{\textcolor{red}{Nota:}} \textcolor{blue}{Si se quiere subir mas de un archivo, se ponen los nombres separados por espacio}\\ \newline
+Para mostrar información del área e trabajo y el área de preparación:
+\begin{verbatim}
+    git status
+\end{verbatim}
+remover un archivo del área de preparación:
+\begin{verbatim}
+    git rm --cached nombre_archivo
+\end{verbatim}
+\textbf{Hacer un commit} (pasar lo del área de preparación al repositorio):
+\begin{verbatim}
+    git commit -m "comentario o nota cortos" -a
+\end{verbatim}
+\textcolor{red}{Nota:} \textcolor{blue}{Al hacer esto el área de preparación ya no cuenta con estos archivos.} \\ \newline
+Otra forma de hacer un commit es poniendo el archivo en la carpeta que contiene las carpeta oculta .git y usar:
+\begin{verbatim}
+    git commit
+\end{verbatim}
+De este modo se abrirá el editor para agregar el comentario o la nota. Al guardar y cerrar el archivo se ejecutará la instrucción. \\\newline
+\textbf{Eliminar un archivo de un repositorio:} Al remover el archivo con el comando "rm" y checar el estatus con "git status", se indica que hay un cambio (la eliminación del archivo) que no está listo para ser un commit. Para esto se tiene que subir la nota de que el archivo fué eliminado. Esto se hace nuevamente con el comando "git add nombre\_archivo". Al no estar el archivo el programa interpreta la instrucción "add" como que el archivo se borró y cambia su estatus a delete. Finalmente se agraga el comentario con el comando "git commit -m "el archivo se borró etc."\\ \newline
+Para restaurar en el área de trabajo,  un archivo subido al área de preparación, se utiliza: \begin{verbatim}
+    git restore nombre_archivo
+\end{verbatim}
+Si se tiene un archivo en el área de trabajo y se modifica, esto se señalara al aplicar "git status". \\\newline
+
+Para observar la versión antes de los cambios se usa: 
+\begin{verbatim}
+    git checkout nombre_archivo 
+\end{verbatim}
+El checkout te regresa hasta el último commit. Sin embargo, si se sube el archivo al area de programación (con "add") sin hacer commit, el checkout te llevará a esa versión. Para evitar eso, se utiliza \begin{verbatim}
+    git reset --hard
+\end{verbatim}
+que te regresa al últmo commit descartando todos los cambios locales.\\\newline
+Cambiar el nombre de un archivo:
+\begin{verbatim}
+    git mv nombre_actual nombre_nuevo
+\end{verbatim}
+Al usar "git status" se indicará como rename.\\ \newline Para obtener un "status" más sintético:
+\begin{verbatim}
+    git status -s
+\end{verbatim}
+\subsection{Diferencia entre versiones.} 
+Para eliminar un repositorio basta borrar todos los archivos del directorio incluyendo la carpeta oculta ".git". \\ \newline Para mostrar la última versión commiteada de un archivo en el bash \begin{verbatim}
+    git show nombre_archivo
+\end{verbatim}
+Para comparar lo que se tienen en el área de preparación y el área de commit se usa \begin{verbatim}
+    git diff --staged
+\end{verbatim}
+Al ejecutar, se muestra en rojo lo de commit y en verde lo del área de preparación.\\ \newline \textbf{Comparación entre commits.} Primero se obtiene la identificación del commit con:\begin{verbatim}
+    git log
+\end{verbatim}
+Para obtener una versión abreviada (con solo los primeros 7 caracteres de la identificación):
+\begin{verbatim}
+    git log -- oneline
+\end{verbatim}
+Para configurar el número de caracteres mostrados en dicha versión abreviada se usa: \begin{verbatim}
+    git config --global core.abbrev numero
+\end{verbatim}
+Obteniendo las claves (o sus primeros caracteres) se realiza la comparacción de dos commits con:
+\begin{verbatim}
+    git diff clave1 clave2
+\end{verbatim}
+Para mostrar solo el nombre de los archivos que cambiaron:
+\begin{verbatim}
+    git diff --name-only clave1 clave2 
+\end{verbatim}
+Para mostrar las líneas que cambiaron:
+\begin{verbatim}
+    git diff --word-diff clave1 clave2 
+\end{verbatim}
+\subsection{Modificar un commit} En primera instancia, es menos problemático modificar solo el último commit. Commits intermedios pueden modificarse pero es complejo y se cambian algunas claves lo cual puede no ser conveniente. Para modificar el último commit se usa
+\begin{verbatim}
+    git commit --amend
+\end{verbatim}
+Si además de cambiar el comentario se desea modificar o agregar un archivo, se tienen que hacer el cambio y agregar al area de preparación con "add" y después usar el comando anterior. 
+\subsection{Deshacer un commit} El último commit está indicado por el puntero: \begin{center}
+    (\textcolor{cyan}{HEAD} -> \textcolor{green}{master})
+\end{center} 
+Así, para eliminar los últimos $k$ commits de los $n$ que hay en total, se tiene que colocar el puntero en el commit $n-k$. Esto se hace con \begin{verbatim}
+    git reset --soft clave(n-k)
+\end{verbatim}
+En el caso de "soft", los commits en sí no se eliminan. Estos se pasan al área de preparación donde pueden modificarse y re subirse como nuevos commits. Si el archivo ya existe por un comit anterior, este se reescribe, de otro modo solo se agrega o se mantiene.\\\newline Una forma alternativa para el comando anterior es: \begin{verbatim}
+    git reset --soft head ~ (n-k)
+\end{verbatim}
+\textcolor{red}{Nota:} \textcolor{blue}{el signo ~ (virgulilla) se obtiene tecleando \textit{alt gr} +}.\\ \newline
+Si en lugar de usar "soft" se usa "mixed" el área de preparación se límpia por completo sin afectarse los cambios realizados en el área de trabajo.\\ \newline Si se usa "hard" se limpia tanto el área de trabajo como el área de preparación y los archivos del último commit se colocan en el área de trabajo (en particular todos los cambios se pierden por lo que hay que tener cuidado). 
+\section{Ramas (branches)} Para mostrar todas la ramas se usa: 
+\begin{verbatim}
+    git branch
+\end{verbatim}
+\textcolor{red}{Nota:} \textcolor{blue}{La rama en la que uno se enecuentra se indica con un *.}\\ \newline
+Para crear una nueva rama se usa
+\begin{verbatim}
+    git branch nombre-de-la-rama
+\end{verbatim}
+Para movernos a una rama se usa \begin{verbatim}
+    git checkout nombre-de-la-rama
+\end{verbatim}
+Una alternativa más moderna y específica para moverse entre ramas es:
+\begin{verbatim}
+    git switch nombre-de-la-rama
+\end{verbatim}
+En ambos casos hay una manera para crear la rama y trasladarse a ella con un solo comando: 
+\begin{verbatim}
+    git checkout -b nombre-de-la-rama
+    git switch -c nombre-de-la-rama
+\end{verbatim}
+\textcolor{red}{Nota:} \textcolor{blue}{la rama se crea en la rama en la que uno se encuentra. Así, según en donde se esté, se pueden crear sub ramas.}\\ \newline Para borrar una rama se usa 
+\begin{verbatim}
+    git branch -d nombre-de-la-rama
+\end{verbatim}
+\textcolor{red}{Nota:} \textcolor{blue}{es necesario no estar en la rama que se desea borrar (o en alguna de sus subramas).}\\ \newline Para cambiar el nombre de una rama en la que no estamos se usa:
+\begin{verbatim}
+    git branch -m nombre-actual nuevo-nombre
+\end{verbatim}
+Si se quiere cambiar el nombre de la rama en donde uno se encuentra se usa:
+\begin{verbatim}
+    git branch -m nuevo-nombre
+\end{verbatim}
+\subsection{Fucionar ramas} Para fucionar una rama hay que situarse en la rama principal (o donde quieran agragarse los cambios de la sub rama) y usar \begin{verbatim}
+    git merge nombre-de-la-otra-rama
+\end{verbatim}
+\textcolor{red}{Nota:} \textcolor{blue}{en rigor, lo que se fucionan son los commites. no tanto las ramas. De hecho, al usar "branch", aún se verán las dos ramas.} \\\newline Para revertir una fución de ramas se usa 
+\begin{verbatim}
+    git reset --hard clave
+\end{verbatim}
+Donde la clave es del commit anterior al commit donde las ramas ya están fucionadas. \\ \newline \textcolor{red}{Nota:} \textcolor{blue}{En realidad lo que pasa es que se elimina el commite con las ramas fucionadas sin afectar a las ramas secundaria y principal} \\ \newline Una ves satisfechos con los cambios y fucionados a la rama principal, se puede borrar la rama donde se hcieron las modificaciones con "git branch -d nombre-de-la-rama"
+\subsubsection{Merge conflicts}
+ Con el comando "git log --oneline" se obtienen todos los commits de la rama en la que uno se encuentra y de las rammas anteriores. Para ver también los commits de las ramas posteiorez se usa:\begin{verbatim}
+     git log --oneline --all 
+ \end{verbatim}
+ Puede ocurrir que al crearse otra rama para realizar algún cambio o mejora, la rama principal sigua sufriendo cambios o mejoras a la par, de manera que al fusionar las ramas surgirá un conflicto sobre cuáles cambios se mantienen, ya sea los hechos en la rama principal o los hechos en la rama secundaria. Esto será decisión de quienes trabajen en el proyecto. Para facilitar la toma de decisiones y la combinación de los cambios, el editor de código cuenta con la herramienta "Merge Editor".  
+ \subsection{Git ignore}
+ Archivo de nombre ".gitignore" que contiene el nombre de todos los archivos del área de trabajo son ignorados al usar "add ." (subir todo al área de preparación) y al hacer commits. i.e. no se suben. \\ \newline En el archivo se pueden hacer comentarios con \# y en cada linea se colocan los nombres de los archivos a ignorar. Si se quieren eliminar todos los archivos con algún formato se coloca *. Por ejemplo, si se quieren ignorar todos los archivos de texto se usa: \begin{verbatim}
+     *.txt
+ \end{verbatim}
+ Si se quiere hacer una excepción se usa
+  \begin{verbatim}
+     *.txt
+     !nombre_archivo.txt
+ \end{verbatim}
+Para ignorar todo un directorio se coloca 
+\begin{verbatim}
+     Nombre-directorio/
+ \end{verbatim}
+ Si se quiere hacer una excepción se usa
+  \begin{verbatim}
+     Nombre-directorio/nombre-archivo
+ \end{verbatim}
+ Para observar todos los archivos que contiene un commit, solo por su nombre, se usa:
+ \begin{verbatim}
+     git ls-tree -r --name-only clave-del-commit
+ \end{verbatim}
+ \textcolor{red}{Nota:} \textcolor{blue}{Cuando se trate del último commit, puede sustituirse su clave por la palabra HEAD.}
+  \subsubsection{Git ignore global.} Si se tiene un archivo que sin importar el proyecto nunca va a subirse, para no estar incluyendolo en el archivo ".gitignore" de cada repositorio se puede crear un archivo que contenga su nombre y configurarlo a manera de que sea ignorado, de manera global, en cualquier repositorio. Para esto se usa: \begin{verbatim}
+      git config --global core.excludesfile ruta
+  \end{verbatim}
+  donde "ruta" es la ruta del archivo que contiene el nombre o el formato de los archivos que se ignorarán de manera global.
+  \subsection{Alias} Se usa para renombrar se manera simple un comando largo que es usado con regularidad. Por ejemplo se tienen los siguientes comandos:\begin{verbatim}
+      git log --oneline
+      
+      git log --oneline --all
+      
+      git log --oneline --all --graph 
+      
+      git log --oneline --all --graph --pretty=format:
+      "%C(auto)%h%d %s %C(black)%C(bold)%cr"
+  \end{verbatim}
+  El agregado "graph" sirve para que los commites se muestren en un diagrama donde se pueden observar las ramas del proyecto. \\\newline
+  El agregado "pretty=format:\%C..." sirve para que tambien se muestre hace cuanto se hizo cada commite con un cierto formato y color de fuente.\\ \newline
+  Naturalmente Desde el tercer ejemplo ya es algo largo para teclear constantemente, de manera que se usa alias para renombrarlos de manera más simple: \begin{verbatim}
+      git config --global alias.nombre-corto "comando"
+  \end{verbatim}
+  \textcolor{red}{Nota: } \textcolor{blue}{en el caso del último comando, este incluye comillas dobles. Estas deben sustituirse por comillas simples al reescribirse en el comando anterior.}
+  \subsection{Git reflog} Lleva un registro de todos los movimientos del apuntador \textcolor{cyan}{HEAD} ->. \\\newline Al borrar un commit en realidad no se borran los archivos que estos contienen, lo que se borra es la refeencia a estos. Así en caso de eliminar accidentalmente un comit con "git reset --hard clave" este puede recuperarse nuevamente con "git reset --hard clave". Sin embargo puede que no recordemos dicha clave. Para esto se usa:\begin{verbatim}
+      git reflog
+  \end{verbatim}
+  Que muestra todos los commits hechos.
+  \section{Github}
+  plataformas para crear proyectos abiertos de herramientas y aplicaciones, y se caracteriza sobre todo por sus funciones colaborativas.
+  \subsection{Git clone} Es la descarga de un repositorio cargado en el servidor de Github para poder trabajar con él desde nuestra computadora.\\ \newline Para abrir VS Code desde el bash se usa:
+  \begin{verbatim}
+      code .
+  \end{verbatim}
+  El editor se abre con la carpeta en la que nos encontremos. \\ \newline Para clonar un repositorio de Github se selecciona la opción < > Code, se copia la URL en HTTPS y se usa en el bash de Git:
+  \begin{verbatim}
+      git clone URL 
+  \end{verbatim}
+  \subsection{Git push} Una vez realizados los cambios deseados en el repositorio descargado deseamos subir estos cambios de vuelta al servidor. En principio, estos cambios se encuentran en nuestra área de trabajo, por lo que primero deben subirse al área de preparación con " git add" y luego deben ser commiteados con cualquiera de las dos maneras de las que ya se ha hablado. Hecho esto, se tiene que configurar el correo electrónico con 
+  \begin{verbatim}
+      git config --global user.email "email"
+  \end{verbatim}
+  donde el email es aquel con el con el que se abrió la cuenta de git. Hecho esto, los cambios se suben con el comando: \begin{verbatim}
+      git push origin master
+  \end{verbatim}
+  donde "origin" hace referencia al lugar de donde se descargó y master, que se quiere subir en la rama principal del repositorió original del servidor.
+  \subsection{Git pull y git fetch} Cuando se baja un repositorio de un servidor para hacerle cambios, nada garantiza que el repositorio sufra otros cambios en el mismo servidor o que algún otro usuario lo descarge, lo modifique y lo vuelva a subir. En principio esto causará un conflicto cuando querramos subir nuestros cambios. Antes de aprender a solucionar esto es util saber cómo bajar solo los cambios realizados por otras personas en el servidor. para esto se usa \begin{verbatim}
+      git pull
+  \end{verbatim}
+  \textcolor{red}{Nota:} \textcolor{blue}{al usar este comando no solo se descargan los nuevos arhivos. También se actualizan los cambios en los archivos ya existenetes.} \\ \newline
+  Cuando se quiere descargar un cambio con "pull" pero nosotros ya hemos realizado también otros cambios, al momento de hacer la combinacion de los cambios se tendrá un problema similar al obtenido al fucionar dos ramas por lo que los se tendran que elegir que cambios hacer. Para tener un control de esto se usa \begin{verbatim}
+      git fetch
+  \end{verbatim} 
+  Para ver los cambios tenemos que crear a una rama ficticia en donde están dichos cambios. Para esto se usa \begin{verbatim}
+      git switch --detach origin/master
+  \end{verbatim}
+  \end{multicols}
+
+
+
+
+
+\end{document}
